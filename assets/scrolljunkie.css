@@ -1,0 +1,17 @@
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/benwnuk\/Google\%20Drive\/Projects\/ScrollJunkie\/source\/scrolljunkie\.scss}line{font-family:\000035}}
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  font-size: inherit;
+  line-height: inherit;
+  box-sizing: border-box;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/benwnuk\/Google\%20Drive\/Projects\/ScrollJunkie\/source\/scrolljunkie\.scss}line{font-family:\0000314}}
+body {
+  font-size: 14px;
+}
