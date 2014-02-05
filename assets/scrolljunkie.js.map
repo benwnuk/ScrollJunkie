@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "scrolljunkie.js",
+  "sourceRoot": "../source/",
+  "sources": [
+    "scrolljunkie.coffee"
+  ],
+  "names": [],
+  "mappings": "AAAA;AAAA;AAAA"
+}
