@@ -1,6 +1,7 @@
 (function() {
-  test;
-
+  $(document).ready(function() {
+    return $.fn.scrollJunkie = function() {};
+  });
 
 }).call(this);
 

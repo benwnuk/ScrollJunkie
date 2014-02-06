@@ -1,1 +1,2 @@
-test
+$(document).ready ()->
+	$.fn.scrollJunkie = ()->

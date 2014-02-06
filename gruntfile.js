@@ -17,7 +17,6 @@ module.exports = function(grunt) {
 			dist:{
 				options: {
 					outputStyle: 'expanded',
-					debugInfo: true,
 					sassDir: 'source',
 					cssDir: 'assets'
 				}	
