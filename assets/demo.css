@@ -1,0 +1,69 @@
+/* line 3, ../source/demo.scss */
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  font-size: inherit;
+  line-height: inherit;
+  box-sizing: border-box;
+}
+
+/* line 13, ../source/demo.scss */
+body {
+  font-size: 16px;
+  background: green;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* line 21, ../source/demo.scss */
+body > section {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #fff;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  z-index: 5;
+}
+/* line 31, ../source/demo.scss */
+body > section:before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 100%;
+  vertical-align: middle;
+  margin-left: -0.25em;
+}
+/* line 39, ../source/demo.scss */
+body > section > div {
+  display: inline-block;
+  width: 100%;
+  min-height: 200px;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  line-height: 16px;
+  vertical-align: middle;
+  z-index: 10;
+}
+/* line 49, ../source/demo.scss */
+body > section.bg-0top-50bottom {
+  min-height: 50%;
+  margin-bottom: -50vh;
+  z-index: 0;
+}
+/* line 53, ../source/demo.scss */
+body > section.bg-0top-50bottom:before {
+  height: 50%;
+}
+/* line 57, ../source/demo.scss */
+body > section.bg-50top-50bottom {
+  margin-top: -50vh;
+  margin-bottom: -50vh;
+  z-index: 0;
+}

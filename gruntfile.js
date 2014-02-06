@@ -22,16 +22,24 @@ module.exports = function(grunt) {
 				}	
 			}			
 		},
+		connect: {
+			dev: {
+				options: {
+					port: 8888,
+					livereload: true
+				}
+			}
+		},
 		watch: {
 			coffee: {
-				files: ['source/scrolljunkie.coffee'],
+				files: ['source/*.coffee'],
 				tasks: ['coffee'],
 				options: {
 					livereload: true
 				}
 			},
 			compass: {
-				files: ['source/scrolljunkie.scss'],
+				files: ['source/*.scss'],
 				tasks: ['compass'],
 				options: {
 					livereload: true
@@ -44,6 +52,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-coffee');
-	grunt.registerTask('default', ['watch']);
+	grunt.loadNpmTasks('grunt-contrib-connect');
 
+	grunt.registerTask('default', ['connect','watch']);
 };

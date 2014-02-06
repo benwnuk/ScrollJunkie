@@ -1,10 +1,10 @@
 <html>
 	<head>
 		<title>ScrollJunkie</title>
-		<script src="http://localhost:35729/livereload.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script src="assets/scrolljunkie.js"></script>
 		<link rel="stylesheet" href="assets/scrolljunkie.css">
+		<link rel="stylesheet" href="assets/demo.css">
 		<script>
 			$(document).ready(function(){
 				$('body').scrollJunkie({
@@ -39,7 +39,7 @@
 								},
 								transform: {
 									scale : true, // should the image be scaled to always fill, or left at natural size? default: false
-									overflow : 'hide', // should the bounding box mask the transforming content. default : true
+									overflow : 'hide', // should the bounding box mask the transforming content. show or hide. default : 'hide'
 									align : '50', // 0 aligns top at top, 50 aligns middle at middle, 100 aligns bottom at bottom. default : 50
 									ratioX : '0', // 0 appears fixed in screen, does not move left or right - default: 0
 									ratioY : '-10%' // scrolls at -10% of page scroll speed, moving slightly slower - default: 0
@@ -54,7 +54,33 @@
 	</head>
 	<body>
 
-		<div data-scrolljunkie="effect1,effect2">Hello World</div>
+		
+		<section class="bg-0top-50bottom" data-scrolljunkie="slowScroll">
+
+		</section>
+		<section>
+			<div>
+				Foo
+			</div>
+		</section>
+		<section class="bg-50top-50bottom" data-scrolljunkie="slowScroll">
+
+		</section>
+		<section>
+			<div>
+				<h1>testing sections</h1>
+				<div data-scrolljunkie="effect1,effect2">Hello World</div>
+			</div>
+		</section>
+		<section class="bg-50top-50bottom" data-scrolljunkie="slowScroll">
+
+		</section>
+		<section>
+			<div>
+				<h1>testing sections</h1>
+				<div data-scrolljunkie="effect1,effect2">Hello World</div>
+			</div>
+		</section>
 
 	</body>
 </html>
