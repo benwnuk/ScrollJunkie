@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>ScrollJunkie</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script src="assets/jquery-1.10.2.min.js"></script>
 		<script src="assets/scrolljunkie.js"></script>
 		<link rel="stylesheet" href="assets/scrolljunkie.css">
 		<link rel="stylesheet" href="assets/demo.css">
@@ -55,24 +55,15 @@
 	<body>
 
 		
-		<section class="bg-0top-50bottom" data-scrolljunkie="slowScroll">
+		<section class="bg-b50" data-scrolljunkie="slowScroll" style="background-image:url(img/grid-blue.png)">
 
 		</section>
 		<section>
 			<div>
-				Foo
+				<h1>Foo</h1>
 			</div>
 		</section>
-		<section class="bg-50top-50bottom" data-scrolljunkie="slowScroll">
-
-		</section>
-		<section>
-			<div>
-				<h1>testing sections</h1>
-				<div data-scrolljunkie="effect1,effect2">Hello World</div>
-			</div>
-		</section>
-		<section class="bg-50top-50bottom" data-scrolljunkie="slowScroll">
+		<section class="bg-t50 bg-b50" data-scrolljunkie="slowScroll" style="background-image:url(img/grid-red.png)">
 
 		</section>
 		<section>
@@ -81,6 +72,19 @@
 				<div data-scrolljunkie="effect1,effect2">Hello World</div>
 			</div>
 		</section>
+		<section class="bg-t50 bg-h100 bg-b50" data-scrolljunkie="slowScroll"  style="background-image:url(img/grid-yellow.png)">
+			<div>
+				<h1>this should be 150%</h1>
+			</div>
+		</section>
+		<section>
+			<div>
+				<h1>testing sections</h1>
+				<div data-scrolljunkie="effect1,effect2">Hello World</div>
+			</div>
+		</section>
+		<section class="bg-t50" data-scrolljunkie="slowScroll" style="background-image:url(img/grid-green.png)">
 
+		</section>
 	</body>
 </html>

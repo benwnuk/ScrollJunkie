@@ -16,14 +16,19 @@ body {
 	max-width: 800px;
 	margin: 0 auto;
 }
+h1 {
+	font-size: 200%;
+	line-height: 200%;
+}
 
 body {
 	> section {
 		display: block;
 		width: 100%;
-		min-height: 100%;
-		background: rgba(0,0,0,.5);
-		border: 1px solid #fff;
+		min-height: 100vh; 
+		background-position: center center;
+		//background-size: cover;
+		//border: 1px solid #fff;
 		position: relative;
 		text-align: center;
 		vertical-align: middle;
@@ -39,25 +44,48 @@ body {
 		> div {
 			display: inline-block;
 			width: 100%;
-			min-height: 200px;
+			min-height: 50vh;
 			background: rgba(255,255,255,.8);
 			text-align: center;
 			line-height: 16px;
 			vertical-align: middle; 
 			z-index: 10;
 		}
-		&.bg-0top-50bottom {
-			min-height: 50%;
-			margin-bottom: -50vh;
+		
+		&[class^='bg-'] {
 			z-index: 0;
+			min-height: 0;
+			&:before {
+				height: 0;
+			}
+		}
+		&.bg-h50 {
+			min-height: 50vh;
 			&:before {
 				height: 50%;
 			}
 		}
-		&.bg-50top-50bottom {
+		&.bg-h100 {
+			min-height: 100vh;
+			&:before {
+				height: 100%;
+			}
+		}
+		&.bg-t50 {
+			padding-top: 50vh;
 			margin-top: -50vh;
+		}
+		&.bg-t100 {
+			padding-top: 100vh;
+			margin-top: -100vh;
+		}
+		&.bg-b50 {
+			padding-bottom: 50vh;
 			margin-bottom: -50vh;
-			z-index: 0;
+		}
+		&.bg-b100 {
+			padding-bottom: 100vh;
+			margin-top: -100vh;
 		}
 	}
 }

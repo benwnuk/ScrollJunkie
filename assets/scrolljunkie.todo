@@ -1,0 +1,13 @@
+Random Tasks:
+	☐ fix image resources
+	
+
+Scroll Junkie operations:
+	☐ initilize plugin
+	☐ establish single collection to contain all sjEffects, add them
+	☐ establish single collection to contain all sjCollection, add them
+	☐ watch for new aditions to dom, add objects to sjCollection
+
+	☐ init handler
+	☐ resize handler
+		☐ reset dimensions, start/finish points
