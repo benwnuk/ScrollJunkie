@@ -79,7 +79,7 @@ body > section.bg-h100 {
 }
 /* line 70, ../source/demo.scss */
 body > section.bg-h100:before {
-  height: 100%;
+  height: 50%;
 }
 /* line 74, ../source/demo.scss */
 body > section.bg-t50 {

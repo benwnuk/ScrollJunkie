@@ -7,6 +7,10 @@
 		<link rel="stylesheet" href="assets/demo.css">
 		<script>
 			$(document).ready(function(){
+
+				
+
+
 				$('body').scrollJunkie({
 
 				// all start and ends based on position of element relative to top of screen
@@ -43,6 +47,15 @@
 									align : '50', // 0 aligns top at top, 50 aligns middle at middle, 100 aligns bottom at bottom. default : 50
 									ratioX : '0', // 0 appears fixed in screen, does not move left or right - default: 0
 									ratioY : '-10%' // scrolls at -10% of page scroll speed, moving slightly slower - default: 0
+								}
+							}
+						]
+					},
+					'slowScroll': {
+						effects: [
+							{
+								transform: {
+									ratioY: '-20%'
 								}
 							}
 						]
