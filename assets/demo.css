@@ -49,7 +49,7 @@ body > section:before {
 body > section > div {
   display: inline-block;
   width: 100%;
-  min-height: 50vh;
+  min-height: 50%;
   background: rgba(255, 255, 255, 0.8);
   text-align: center;
   line-height: 16px;
@@ -71,15 +71,15 @@ body > section.bg-h50 {
 }
 /* line 64, ../source/demo.scss */
 body > section.bg-h50:before {
-  height: 50%;
+  height: 50vh;
 }
 /* line 68, ../source/demo.scss */
 body > section.bg-h100 {
-  min-height: 100vh;
+  min-height: 100%;
 }
 /* line 70, ../source/demo.scss */
 body > section.bg-h100:before {
-  height: 50%;
+  height: 50vh;
 }
 /* line 74, ../source/demo.scss */
 body > section.bg-t50 {

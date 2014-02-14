@@ -44,7 +44,7 @@ body {
 		> div {
 			display: inline-block;
 			width: 100%;
-			min-height: 50vh;
+			min-height: 50%;
 			background: rgba(255,255,255,.8);
 			text-align: center;
 			line-height: 16px;
@@ -62,13 +62,13 @@ body {
 		&.bg-h50 {
 			min-height: 50vh;
 			&:before {
-				height: 50%;
+				height: 50vh;
 			}
 		}
 		&.bg-h100 {
-			min-height: 100vh;
+			min-height: 100%;
 			&:before {
-				height: 50%;
+				height: 50vh;
 			}
 		}
 		&.bg-t50 {

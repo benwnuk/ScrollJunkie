@@ -36,30 +36,35 @@ $(document).ready ()->
 		# bind actual behaviors to the elements
 		#  and bind element-specific data
 		newCollection.each ()->
-			#log $(this)
-			elementBehaviors = []
+			elementEffects = []
 			that = $(this)
-			$(this).data 'elementBehaviors', elementBehaviors
 			for elementBehavior in $(this).attr('data-scrolljunkie').split(',')
 				if sjBehaviors[elementBehavior]?
-					nb = $.extend({}, sjBehaviors[elementBehavior])
-					for effect in nb.effects
-						effect.elements = {}
-						effect.host = that
-						effect.data = {}
-					elementBehaviors.push(nb)
+					elementEffects = for e in sjBehaviors[elementBehavior].effects
+						f = $.extend({}, e)
+						f.behavior = elementBehavior
+						f.mediaQuery = sjBehaviors[elementBehavior].mediaQuery
+						f.host = that
+						f.elements = {}
+						f.data = {}
+						f.init()
+						f
+					log "the behavior '#{elementBehavior}' was innitialized"
+					#log elementEffects
 				else
-					log "the behavior #{elementBehavior} could not been initialized" 
+					log "the behavior '#{elementBehavior}' could not be initialized" 
+			$(this).data 'elementEffects', elementEffects
 
 		processEachEffect = (callback)->
 			# provide a callback, will be passed the effect in the context of the element as this
 			sjCollection.each ()->
 				that = $(this)
-				for elementBehavior in $(this).data('elementBehaviors')
-					if callback? and checkMediaQuery(elementBehavior.mediaQuery)
-						for effect in elementBehavior.effects
-							# callback will consider the effect itself to be "this"
-							callback.call(effect)
+				for effect in $(this).data('elementEffects')
+					if callback? and checkMediaQuery(effect.mediaQuery)
+						# callback will consider the effect itself to be "this"
+						callback.call(effect)
+						# log effect
+			return false
 			
 		computeOffset = (eh, vh, value)->
 			# provided the element height, vieport height, and the value string, return an offset in px used to compute start/end

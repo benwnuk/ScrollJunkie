@@ -52,55 +52,54 @@
         sjCollection = $.data(document.body, 'sjCollection', newCollection);
       }
       newCollection.each(function() {
-        var effect, elementBehavior, elementBehaviors, nb, that, _i, _j, _len, _len1, _ref, _ref1, _results;
-        elementBehaviors = [];
+        var e, elementBehavior, elementEffects, f, that, _i, _len, _ref;
+        elementEffects = [];
         that = $(this);
-        $(this).data('elementBehaviors', elementBehaviors);
         _ref = $(this).attr('data-scrolljunkie').split(',');
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           elementBehavior = _ref[_i];
           if (sjBehaviors[elementBehavior] != null) {
-            nb = $.extend({}, sjBehaviors[elementBehavior]);
-            _ref1 = nb.effects;
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              effect = _ref1[_j];
-              effect.elements = {};
-              effect.host = that;
-              effect.data = {};
-            }
-            _results.push(elementBehaviors.push(nb));
+            elementEffects = (function() {
+              var _j, _len1, _ref1, _results;
+              _ref1 = sjBehaviors[elementBehavior].effects;
+              _results = [];
+              for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                e = _ref1[_j];
+                f = $.extend({}, e);
+                f.behavior = elementBehavior;
+                f.mediaQuery = sjBehaviors[elementBehavior].mediaQuery;
+                f.host = that;
+                f.elements = {};
+                f.data = {};
+                f.init();
+                _results.push(f);
+              }
+              return _results;
+            })();
+            log("the behavior '" + elementBehavior + "' was innitialized");
           } else {
-            _results.push(log("the behavior " + elementBehavior + " could not been initialized"));
+            log("the behavior '" + elementBehavior + "' could not be initialized");
           }
         }
-        return _results;
+        return $(this).data('elementEffects', elementEffects);
       });
       processEachEffect = function(callback) {
-        return sjCollection.each(function() {
-          var effect, elementBehavior, that, _i, _len, _ref, _results;
+        sjCollection.each(function() {
+          var effect, that, _i, _len, _ref, _results;
           that = $(this);
-          _ref = $(this).data('elementBehaviors');
+          _ref = $(this).data('elementEffects');
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            elementBehavior = _ref[_i];
-            if ((callback != null) && checkMediaQuery(elementBehavior.mediaQuery)) {
-              _results.push((function() {
-                var _j, _len1, _ref1, _results1;
-                _ref1 = elementBehavior.effects;
-                _results1 = [];
-                for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-                  effect = _ref1[_j];
-                  _results1.push(callback.call(effect));
-                }
-                return _results1;
-              })());
+            effect = _ref[_i];
+            if ((callback != null) && checkMediaQuery(effect.mediaQuery)) {
+              _results.push(callback.call(effect));
             } else {
               _results.push(void 0);
             }
           }
           return _results;
         });
+        return false;
       };
       computeOffset = function(eh, vh, value) {};
       checkMediaQuery = function(mq) {
