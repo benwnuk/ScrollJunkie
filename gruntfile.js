@@ -45,7 +45,15 @@ module.exports = function(grunt) {
 					livereload: true
 				}
 			}
-		}
+		},
+		shell: {
+	        ngrok: {
+				command: "./start-ngrok.sh",
+				// options: {
+    //             	stdout: true
+    //         	}
+	        }
+	    }
 	});
 
 	// Load the plugin that provides the "uglify" task.
@@ -53,6 +61,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-coffee');
 	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-shell');
 
-	grunt.registerTask('default', ['connect','watch']);
+	grunt.registerTask('default', ['connect','shell','watch']);
 };
