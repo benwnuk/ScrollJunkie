@@ -1,7 +1,7 @@
 (function() {
   $(document).ready(function() {
     return $.fn.scrollJunkie = function(opts) {
-      var activeSelector, checkMediaQuery, computeOffset, debugOutput, i, io, log, newCollection, processEachEffect, sjBehaviors, sjCollection, v, vo;
+      var activeSelector, checkMediaQuery, computeOffset, debugOutput, i, io, log, newCollection, performTransform, processEachEffect, sjBehaviors, sjCollection, v, vo;
       activeSelector = '[data-scrolljunkie]';
       debugOutput = true;
       log = function(output) {
@@ -71,7 +71,8 @@
                 f.host = that;
                 f.elements = {};
                 f.data = {};
-                f.init();
+                f.startOffset = null;
+                f.endOffset = null;
                 _results.push(f);
               }
               return _results;
@@ -101,10 +102,26 @@
         });
         return false;
       };
-      computeOffset = function(eh, vh, value) {};
+      computeOffset = function(eh, vh, value) {
+        value = value.replace(/[^0-9vVhH\-\+\*\/\%]+/g, '');
+        value = value.replace(/\d+(vh|%)/g, "($&)");
+        value = value.replace(/vh/g, "*(" + vh + "/100)");
+        value = value.replace(/%/g, "*(" + eh + "/100)");
+        return eval(value);
+      };
       checkMediaQuery = function(mq) {
         return true;
       };
+      performTransform = function(effect) {};
+      processEachEffect(function() {
+        return this.init();
+      });
+      $(window).on('resize', function(e) {
+        return processEachEffect(function() {
+          return this.resize();
+        });
+      });
+      $(window).on('scroll', function(e) {});
       if (debugOutput) {
         window.sjBehaviors = sjBehaviors;
         window.sjCollection = sjCollection;

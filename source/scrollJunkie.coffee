@@ -45,9 +45,10 @@ $(document).ready ()->
 						f.behavior = elementBehavior
 						f.mediaQuery = sjBehaviors[elementBehavior].mediaQuery
 						f.host = that
-						f.elements = {}
-						f.data = {}
-						f.init()
+						f.elements = {} # used to store custom elements that will be acted upon
+						f.data = {} # used to store custom data that will be used to perform actions
+						f.startOffset = null
+						f.endOffset = null
 						f
 					log "the behavior '#{elementBehavior}' was innitialized"
 					#log elementEffects
@@ -69,13 +70,41 @@ $(document).ready ()->
 		computeOffset = (eh, vh, value)->
 			# provided the element height, vieport height, and the value string, return an offset in px used to compute start/end
 			# strip out all non-acceptable chars
-			# replace vh
-			# replace %
+			value = value.replace(/[^0-9vVhH\-\+\*\/\%]+/g, '')
+			# wrap vh or % with paranthesis
+			value = value.replace(/\d+(vh|%)/g, "($&)")
+			# replace vh with math
+			value = value.replace(/vh/g, "*(#{vh}/100)")
+			# replace % with math
+			value = value.replace(/%/g, "*(#{eh}/100)")
 			# evaluate and return
+			return eval(value)
 
 		checkMediaQuery = (mq)->
 			#check if the media query currently applies, return true or false
 			return true
+
+		performTransform = (effect)->
+			# TODO
+
+		# now initilize each objects effect
+		processEachEffect ()->
+			this.init()
+
+		$(window).on 'resize', (e)->
+			processEachEffect ()->
+				# TODO 
+				#  calculate start and end points for each element/effect
+				#  calculate the width and height of each element/effect
+				#  set the global viewport height
+				this.resize()
+
+		$(window).on 'scroll', (e)->
+			# TODO
+			#  set the global offset position, compensate for bounce
+			#  go through all effects and act on the ones within range
+			#   perform should be called with easing applied
+			#   transform should be processed with easing applied
 
 		if debugOutput
 			window.sjBehaviors = sjBehaviors

@@ -49,9 +49,6 @@ module.exports = function(grunt) {
 		shell: {
 	        ngrok: {
 				command: "./start-ngrok.sh",
-				// options: {
-    //             	stdout: true
-    //         	}
 	        }
 	    }
 	});
