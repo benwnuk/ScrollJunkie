@@ -102,11 +102,18 @@
         });
         return false;
       };
-      computeOffset = function(eh, vh, value) {
-        value = value.replace(/[^0-9vVhH\-\+\*\/\%]+/g, '');
+      computeOffset = function(eh, vh, offset, endOffset, value) {
+        value = value.replace(/[^0-9vVhH\-\+\*\/\%()(start)(end)]+/g, '');
         value = value.replace(/\d+(vh|%)/g, "($&)");
         value = value.replace(/vh/g, "*(" + vh + "/100)");
         value = value.replace(/%/g, "*(" + eh + "/100)");
+        if (value.match('start')) {
+          value = value.replace(/start/g, 0);
+        } else if (value.match('end')) {
+          value = value.replace(/end/g, endOffset);
+        } else {
+          value = "" + offset + " - " + value;
+        }
         return eval(value);
       };
       checkMediaQuery = function(mq) {

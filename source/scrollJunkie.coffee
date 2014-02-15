@@ -67,10 +67,19 @@ $(document).ready ()->
 						# log effect
 			return false
 			
-		computeOffset = (eh, vh, value)->
-			# provided the element height, vieport height, and the value string, return an offset in px used to compute start/end
+		computeOffset = (eh, vh, offset, endOffset, value)->
+			# eh : elements height
+			# vh : the viewports height
+			# offset : the elements distance from the top of the page
+			# endOffset : the full offset for the whole page, docHeight - vh
+			# value : the string that will be interpretted
+			# valid units are:
+			#	###px, ###%, ###vh, start, end
+			# valid math is:
+			#	+, -, *, /, (, )
+
 			# strip out all non-acceptable chars
-			value = value.replace(/[^0-9vVhH\-\+\*\/\%]+/g, '')
+			value = value.replace(/[^0-9vVhH\-\+\*\/\%()(start)(end)]+/g, '') # TODO - make this filter better
 			# wrap vh or % with paranthesis
 			value = value.replace(/\d+(vh|%)/g, "($&)")
 			# replace vh with math
@@ -78,6 +87,13 @@ $(document).ready ()->
 			# replace % with math
 			value = value.replace(/%/g, "*(#{eh}/100)")
 			# evaluate and return
+
+			if value.match('start')
+				value = value.replace(/start/g, 0)
+			else if value.match('end')
+				value = value.replace(/end/g, endOffset)
+			else
+				value = "#{offset} - #{value}"
 			return eval(value)
 
 		checkMediaQuery = (mq)->
