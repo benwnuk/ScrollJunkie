@@ -16,51 +16,71 @@
 				// start defaults to -100vh, which is when item first scrolls into view at bottom of screen
 				// end defaults to 100%, which is when bottom of element scrolls off top of screen
 				// valid units of measurement are % (of element height), vh (viewport height), and px (absolute pixels)
+				// positive numbers delay start/end (lower on page), negative numbers start/end sooner (higher on page)
 
-					'effectName' : {
-						mediaQuery : '', // a media query used to filter if this effect is used or not
-						effects : [
-							{
-								start : '-100vh + 100px', // start as soon as it enters bottom of screen - default '-100vh'
-								end : '100% - 100px', // will end when the bottom of the element clears top of screen - default '100%'
-								easing : 'easingFunctionName', // easing function to use - default is 'linear'
-								init: function(){
-									// optional, ran at startup, can store data in this.data
-									this.elements.innerH3 = this.find('h3')
-								},
-								resize: function(){
-									// optional, ran upon screen resize
-								},
-								perform: function(p){ // position will be 0 if before start, 1 if after end, or decimal if in between
-									// "this" is the element, or dubplicated transformed element
-									// jquery effects to 
-									if (p <= 0 || p > 1) {
-										this.elements.innerH3.css({'opacity' : '0'})
-									} else {
-										this.elements.innerH3.css({'opacity' : '1'})
+					debug: true,
+					behaviors: {
+						'behaviorName' : {
+							mediaQuery : '', // a media query used to filter if this effect is used or not
+							effects : [
+								{
+									name: '',
+									start : '-100vh + 100px', // start as soon as it enters bottom of screen - default '-100vh'
+									end : '100% - 100px', // will end when the bottom of the element clears top of screen - default '100%'
+									easing : 'easingFunctionName', // easing function to use - default is 'linear'
+									init: function(){
+										// optional, ran at startup, can store data in this.data
+										this.elements.innerH3 = this.find('h3')
+									},
+									resize: function(){
+										// optional, ran upon screen resize
+									},
+									perform: function(p){ // position will be 0 if before start, 1 if after end, or decimal if in between
+										// "this" is the element, or dubplicated transformed element
+										// jquery effects to 
+										if (p <= 0 || p > 1) {
+											this.elements.innerH3.css({'opacity' : '0'})
+										} else {
+											this.elements.innerH3.css({'opacity' : '1'})
+										}
+									},
+									transform: {
+										scale : true, // should the image be scaled to always fill, or left at natural size? default: false
+										overflow : 'hide', // should the bounding box mask the transforming content. show or hide. default : 'hide'
+										align : '50', // 0 aligns top at top, 50 aligns middle at middle, 100 aligns bottom at bottom. default : 50
+										//ratioX : '0', // 0 appears fixed in screen, does not move left or right - default: 0
+										ratioY : '-10%' // scrolls at -10% of page scroll speed, moving slightly slower - default: 0
 									}
-								},
-								transform: {
-									scale : true, // should the image be scaled to always fill, or left at natural size? default: false
-									overflow : 'hide', // should the bounding box mask the transforming content. show or hide. default : 'hide'
-									align : '50', // 0 aligns top at top, 50 aligns middle at middle, 100 aligns bottom at bottom. default : 50
-									ratioX : '0', // 0 appears fixed in screen, does not move left or right - default: 0
-									ratioY : '-10%' // scrolls at -10% of page scroll speed, moving slightly slower - default: 0
 								}
-							}
-						]
-					},
-					'slowScroll': {
-						effects: [
-							{
-								init : function(){
-									console.log('initilized')
-								},
-								transform: {
-									ratioY: '-20%'
+							]
+						},
+						'slowScroll': {
+							effects: [
+								{
+									init : function(){
+										console.log('initilized')
+									},
+									transform: {
+										ratioY: '-20%'
+									}
 								}
-							}
-						]
+							]
+						},
+						'fadeInWindow': {
+							effects: [
+								{
+									start : '-100vh + 100px', // start as soon as it enters bottom of screen - default '-100vh'
+									end : '100% - 100px', // will end when the bottom of the element clears top of screen - default
+									perform: function(p){
+										if (p <= 0 || p > 1) {
+											this.host.css({'opacity' : '0'})
+										} else {
+											this.host.css({'opacity' : '1'})
+										}
+									}
+								}
+							]
+						}
 					}
 				})
 
@@ -68,9 +88,8 @@
 		</script>
 	</head>
 	<body>
-
-		
-		<section class="bg-b50" data-scrolljunkie="slowScroll" style="background-image:url(img/grid-blue.png)">
+		<div id="bodywrapper">
+			<section class="bg-b50" data-scrolljunkie="slowScroll" style="background-image:url(img/grid-blue.png)">
 
 		</section>
 		<section>
@@ -101,5 +120,6 @@
 		<section class="bg-t50" data-scrolljunkie="slowScroll" style="background-image:url(img/grid-green.png)">
 
 		</section>
+		</div>
 	</body>
 </html>

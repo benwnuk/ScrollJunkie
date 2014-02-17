@@ -2,7 +2,11 @@ $(document).ready ()->
 	$.fn.scrollJunkie = (opts)->
 
 		activeSelector = '[data-scrolljunkie]'
-		debugOutput = true
+		debugOutput = opts.debug || false
+		debugDisplay = $('<div style="position:fixed;bottom:10px;right:10px;background:black;color:white;padding:3px;font-size:12px">test</div')
+
+		if debugOutput
+			$('body').append(debugDisplay)
 
 		sj = {}
 
@@ -11,8 +15,8 @@ $(document).ready ()->
 
 		$.data(document.body, 'sjBehaviors', {}) unless $.data(document.body, 'sjBehaviors') 
 		sjBehaviors = $.data(document.body, 'sjBehaviors')
-		if $.isPlainObject(opts)
-			for io, vo of opts
+		if $.isPlainObject(opts.behaviors)
+			for io, vo of opts.behaviors
 				sjBehaviors[io] =
 					mediaQuery : vo.mediaQuery || ''
 					effects : for i, v of vo.effects
@@ -26,7 +30,7 @@ $(document).ready ()->
 							scale : if v.transform and v.transform.scale then v.transform.scale else false
 							overflow : if v.transform and v.transform.overflow then v.transform.overflow else 'hide'
 							align : if v.transform and v.transform.align then v.transform.align else 50
-							ratioX : if v.transform and v.transform.ratioX then v.transform.ratioX else 0
+							#ratioX : if v.transform and v.transform.ratioX then v.transform.ratioX else 0
 							ratioY : if v.transform and v.transform.ratioY then v.transform.ratioY else 0
 
 		newCollection = this.find(activeSelector)
@@ -96,7 +100,7 @@ $(document).ready ()->
 			else if value.match('end')
 				value = value.replace(/end/g, endOffset)
 			else
-				value = "#{offset} - #{value}"
+				value = "#{offset} + #{value}"
 			return eval(value)
 
 		checkMediaQuery = (mq)->
@@ -110,25 +114,58 @@ $(document).ready ()->
 		processEachEffect ()->
 			this.init()
 
+		updateDebug = ()->
+			debugDisplay.html(
+				"#{sj.topOffset}px scroll offset<br>
+				#{sj.windowHeight}px window height<br>
+				#{sj.documentHeight}px doc height")
+
 		$(window).on 'resize', (e)->
 			sj.documentHeight = $(document).height()
 			sj.windowHeight = $(window).height()
-			sj.topOffset = $(window).scrollTop()
 			sj.maxOffset = sj.documentHeight - sj.windowHeight
-
 			processEachEffect ()->
-				# TODO 
-				#  calculate start and end points for each element/effect
-				#  calculate the width and height of each element/effect
-				#  set the global viewport height
+				this.width = this.host.outerWidth()
+				this.height = this.host.outerHeight()
+				this.topOffset = this.host.offset().top
+				this.startOffset = computeOffset(this.height, sj.windowHeight, this.topOffset, sj.maxOffset, this.start)
+				this.endOffset = computeOffset(this.height, sj.windowHeight, this.topOffset, sj.maxOffset, this.end)
 				this.resize()
+
+			if debugOutput
+				updateDebug()
 
 		$(window).on 'scroll', (e)->
 			# TODO
-			#  set the global offset position, compensate for bounce
-			#  go through all effects and act on the ones within range
+			#  set the global offset position, compensate for bounce DONE
+			#  go through all effects and act on the ones within range DONE
 			#   perform should be called with easing applied
 			#   transform should be processed with easing applied
+			sj.topOffset = $(window).scrollTop()
+			sj.topOffset = 0 if sj.topOffset < 1
+			sj.topOffset = sj.maxOffset if sj.topOffset > sj.maxOffset
+
+			processEachEffect ()->
+				if this.startOffset < sj.topOffset < this.endOffset
+					# TODO
+					#  apply easing math to perform and transform callbacks
+					this.perform()
+					if this.transform.ratioY != "0"
+						doTransforms(this)
+
+			if debugOutput
+				updateDebug()
+
+		initTransforms = (effect)->
+			# TODO
+			#  create overlay element, bind into effect, etc
+
+		doTransforms = (effect)->
+			# TODO
+			#  process transforms for this effect
+
+		$(window).trigger('resize')
+		$(window).trigger('scroll')
 
 		if debugOutput
 			window.sjBehaviors = sjBehaviors
@@ -136,5 +173,7 @@ $(document).ready ()->
 			window.computeOffset = computeOffset
 			window.processEachEffect = processEachEffect
 			window.sj = sj
+
+
 
 		
