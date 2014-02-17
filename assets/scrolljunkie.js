@@ -209,6 +209,7 @@
           this.resize.width = this.host.outerWidth();
           this.resize.height = this.host.outerHeight();
           this.resize.topOffset = this.host.offset().top;
+          this.resize.leftOffset = this.host.offset().top;
           this.resize.startOffset = computeOffset(this.resize.height, sj.windowHeight, this.resize.topOffset, sj.maxOffset, this.start);
           this.resize.endOffset = computeOffset(this.resize.height, sj.windowHeight, this.resize.topOffset, sj.maxOffset, this.end);
           this.resize.rangeOffset = this.resize.endOffset - this.resize.startOffset;
@@ -229,9 +230,10 @@
         processEachEffect(function() {
           this.scroll = {};
           this.scroll.pixelsFromStart = sj.topOffset - this.resize.startOffset;
-          this.scroll.percentFromStart = this.scroll.pixelsFromStart / this.resize.rangeOffset;
-          this.scroll.percentFromStartEased = easingFunc[this.easing](this.scroll.percentFromStart);
-          this.scroll.pixelsFromStartEased = easingFunc[this.easing](this.scroll.percentFromStart) * this.scroll.pixelsFromStart;
+          this.scroll.percentFromStart = (this.scroll.pixelsFromStart / this.resize.rangeOffset).toFixed(3);
+          this.scroll.percentFromStartEased = (easingFunc[this.easing](this.scroll.percentFromStart)).toFixed(3);
+          this.scroll.pixelsFromStartEased = (easingFunc[this.easing](this.scroll.percentFromStart) * this.scroll.pixelsFromStart).toFixed(3);
+          this.scroll.inRange = this.scroll.percentFromStart > 0 & this.scroll.percentFromStart < 1;
           this.onScroll.call(this);
           if (this.clone) {
             positionClone(this);

@@ -68,14 +68,25 @@
 						'hideAndShow': {
 							effects: [
 								{
-									start : '-100vh + 100px', // start as soon as it enters bottom of screen - default '-100vh'
-									end : '100% - 100px', // will end when the bottom of the element clears top of screen - default
-									clone : true,
+									start : '-100vh + 20px',
+									end : '-50vh - 50%',
+									easing : 'easeOutQuad',
+									init : function(){
+										this.host.add(this.clone).css({'opacity' : 0})
+									},
 									onScroll: function(){
-										if (this.scroll.percentFromStart > 0 & this.scroll.percentFromStart < 1) {
-											this.host.add(this.clone).css({'opacity' : '1'})
-										} else {
-											this.host.add(this.clone).css({'opacity' : '0'})
+										if (this.scroll.inRange) {
+											this.host.add(this.clone).css({'opacity' : this.scroll.percentFromStart})
+										}
+									}
+								},
+								{
+									start : '-50vh - 50%', // start as soon as it enters bottom of screen - default '-100vh'
+									end : '100% - 20px', // will end when the bottom of the element clears top of screen - default
+									easing : 'easeInQuad',
+									onScroll: function(){
+										if (this.scroll.inRange) {
+											this.host.add(this.clone).css({'opacity' : 1-this.scroll.percentFromStart})
 										}
 									}
 								}
@@ -108,7 +119,7 @@
 		</section>
 		<section class="bg-t50 bg-h100 bg-b50" data-scrolljunkie="slowScroll"  style="background-image:url(img/grid-yellow.png)">
 			<div>
-				<h1>this should be 150%</h1>
+				<h1 data-scrolljunkie="hideAndShow">this should be 150%</h1>
 			</div>
 		</section>
 		<section>
