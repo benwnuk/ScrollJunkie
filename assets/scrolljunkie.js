@@ -1,9 +1,10 @@
 (function() {
   $(document).ready(function() {
     return $.fn.scrollJunkie = function(opts) {
-      var activeSelector, checkMediaQuery, computeOffset, debugOutput, i, io, log, newCollection, performTransform, processEachEffect, sjBehaviors, sjCollection, v, vo;
+      var activeSelector, checkMediaQuery, computeOffset, debugOutput, i, io, log, newCollection, performTransform, processEachEffect, sj, sjBehaviors, sjCollection, v, vo;
       activeSelector = '[data-scrolljunkie]';
       debugOutput = true;
+      sj = {};
       log = function(output) {
         if (debugOutput) {
           return console.log(output);
@@ -73,6 +74,7 @@
                 f.data = {};
                 f.startOffset = null;
                 f.endOffset = null;
+                f.sj = sj;
                 _results.push(f);
               }
               return _results;
@@ -117,6 +119,10 @@
         return this.init();
       });
       $(window).on('resize', function(e) {
+        sj.documentHeight = $(document).height();
+        sj.windowHeight = $(window).height();
+        sj.topOffset = $(window).scrollTop();
+        sj.maxOffset = sj.documentHeight - sj.windowHeight;
         return processEachEffect(function() {
           return this.resize();
         });
@@ -126,7 +132,8 @@
         window.sjBehaviors = sjBehaviors;
         window.sjCollection = sjCollection;
         window.computeOffset = computeOffset;
-        return window.processEachEffect = processEachEffect;
+        window.processEachEffect = processEachEffect;
+        return window.sj = sj;
       }
     };
   });

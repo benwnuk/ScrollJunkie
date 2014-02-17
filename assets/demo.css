@@ -17,26 +17,27 @@ body {
   background: green;
   max-width: 800px;
   margin: 0 auto;
+  height: 100%;
 }
 
-/* line 19, ../source/demo.scss */
+/* line 20, ../source/demo.scss */
 h1 {
   font-size: 200%;
   line-height: 200%;
 }
 
-/* line 25, ../source/demo.scss */
+/* line 26, ../source/demo.scss */
 body > section {
   display: block;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   background-position: center center;
   position: relative;
   text-align: center;
   vertical-align: middle;
   z-index: 5;
 }
-/* line 36, ../source/demo.scss */
+/* line 37, ../source/demo.scss */
 body > section:before {
   content: '';
   display: inline-block;
@@ -45,7 +46,7 @@ body > section:before {
   vertical-align: middle;
   margin-left: -0.25em;
 }
-/* line 44, ../source/demo.scss */
+/* line 45, ../source/demo.scss */
 body > section > div {
   display: inline-block;
   width: 100%;
@@ -56,47 +57,47 @@ body > section > div {
   vertical-align: middle;
   z-index: 10;
 }
-/* line 55, ../source/demo.scss */
+/* line 56, ../source/demo.scss */
 body > section[class^='bg-'] {
   z-index: 0;
   min-height: 0;
 }
-/* line 58, ../source/demo.scss */
+/* line 59, ../source/demo.scss */
 body > section[class^='bg-']:before {
   height: 0;
 }
-/* line 62, ../source/demo.scss */
+/* line 63, ../source/demo.scss */
 body > section.bg-h50 {
-  min-height: 50vh;
+  min-height: 50%;
 }
-/* line 64, ../source/demo.scss */
+/* line 65, ../source/demo.scss */
 body > section.bg-h50:before {
   height: 50vh;
 }
-/* line 68, ../source/demo.scss */
+/* line 69, ../source/demo.scss */
 body > section.bg-h100 {
   min-height: 100%;
 }
-/* line 70, ../source/demo.scss */
+/* line 71, ../source/demo.scss */
 body > section.bg-h100:before {
   height: 50vh;
 }
-/* line 74, ../source/demo.scss */
+/* line 75, ../source/demo.scss */
 body > section.bg-t50 {
   padding-top: 50vh;
   margin-top: -50vh;
 }
-/* line 78, ../source/demo.scss */
+/* line 79, ../source/demo.scss */
 body > section.bg-t100 {
   padding-top: 100vh;
   margin-top: -100vh;
 }
-/* line 82, ../source/demo.scss */
+/* line 83, ../source/demo.scss */
 body > section.bg-b50 {
   padding-bottom: 50vh;
   margin-bottom: -50vh;
 }
-/* line 86, ../source/demo.scss */
+/* line 87, ../source/demo.scss */
 body > section.bg-b100 {
   padding-bottom: 100vh;
   margin-top: -100vh;

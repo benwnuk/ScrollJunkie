@@ -4,6 +4,8 @@ $(document).ready ()->
 		activeSelector = '[data-scrolljunkie]'
 		debugOutput = true
 
+		sj = {}
+
 		log = (output)->
 			console.log(output) if debugOutput
 
@@ -49,6 +51,7 @@ $(document).ready ()->
 						f.data = {} # used to store custom data that will be used to perform actions
 						f.startOffset = null
 						f.endOffset = null
+						f.sj = sj
 						f
 					log "the behavior '#{elementBehavior}' was innitialized"
 					#log elementEffects
@@ -92,6 +95,11 @@ $(document).ready ()->
 			this.init()
 
 		$(window).on 'resize', (e)->
+			sj.documentHeight = $(document).height()
+			sj.windowHeight = $(window).height()
+			sj.topOffset = $(window).scrollTop()
+			sj.maxOffset = sj.documentHeight - sj.windowHeight
+
 			processEachEffect ()->
 				# TODO 
 				#  calculate start and end points for each element/effect
@@ -111,5 +119,6 @@ $(document).ready ()->
 			window.sjCollection = sjCollection
 			window.computeOffset = computeOffset
 			window.processEachEffect = processEachEffect
+			window.sj = sj
 
 		
