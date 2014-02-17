@@ -1,14 +1,31 @@
 $(document).ready ()->
 	$.fn.scrollJunkie = (opts)->
 
-		activeSelector = '[data-scrolljunkie]'
+
+		easingFunc =
+			linear: (t)-> t
+			easeInQuad: (t)-> t*t
+			easeOutQuad: (t)-> t*(2-t)
+			easeInOutQuad: (t)-> t<.5 ? 2*t*t : -1+(4-2*t)*t
+			easeInCubic: (t)-> t*t*t
+			easeOutCubic: (t)-> (--t)*t*t+1
+			easeInOutCubic: (t)-> t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1
+			easeInQuart: (t)-> t*t*t*t
+			easeOutQuart: (t)-> 1-(--t)*t*t*t
+			easeInOutQuart: (t)-> t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t
+			easeInQuint: (t)-> t*t*t*t*t
+			easeOutQuint: (t)-> 1+(--t)*t*t*t*t
+			easeInOutQuint: (t)-> t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t
+
+		body = $('body')
+		activeSelector = opts.dataAttribute || 'data-scrolljunkie'
 		debugOutput = opts.debug || false
 		debugDisplay = $('<div style="position:fixed;bottom:10px;right:10px;background:black;color:white;padding:3px;font-size:12px">test</div')
 
 		if debugOutput
-			$('body').append(debugDisplay)
+			body.append(debugDisplay)
 
-		sj = {}
+		sj = {} # used to store global variables like scroll position 
 
 		log = (output)->
 			console.log(output) if debugOutput
@@ -23,9 +40,10 @@ $(document).ready ()->
 						start : v.start || '-100vh'
 						end : v.end || '100%'
 						easing : v.easing || 'linear'
+						clone : v.clone || (v.transform and v.transform.ratioY != 0) || false
 						init : v.init || ()->
-						resize : v.resize || ()->
-						perform : v.perform || ()->
+						onResize : v.onResize || ()->
+						onScroll : v.onScroll || ()->
 						transform : 
 							scale : if v.transform and v.transform.scale then v.transform.scale else false
 							overflow : if v.transform and v.transform.overflow then v.transform.overflow else 'hide'
@@ -33,35 +51,15 @@ $(document).ready ()->
 							#ratioX : if v.transform and v.transform.ratioX then v.transform.ratioX else 0
 							ratioY : if v.transform and v.transform.ratioY then v.transform.ratioY else 0
 
-		newCollection = this.find(activeSelector)
+		newCollection = this.find("[#{activeSelector}]")
 		if $.data(document.body, 'sjCollection') 
 			sjCollection = $.data(document.body, 'sjCollection').add(newCollection)
 		else
 			sjCollection = $.data(document.body, 'sjCollection', newCollection)
 		
-		# bind actual behaviors to the elements
-		#  and bind element-specific data
-		newCollection.each ()->
-			elementEffects = []
-			that = $(this)
-			for elementBehavior in $(this).attr('data-scrolljunkie').split(',')
-				if sjBehaviors[elementBehavior]?
-					elementEffects = for e in sjBehaviors[elementBehavior].effects
-						f = $.extend({}, e)
-						f.behavior = elementBehavior
-						f.mediaQuery = sjBehaviors[elementBehavior].mediaQuery
-						f.host = that
-						f.elements = {} # used to store custom elements that will be acted upon
-						f.data = {} # used to store custom data that will be used to perform actions
-						f.startOffset = null
-						f.endOffset = null
-						f.sj = sj
-						f
-					log "the behavior '#{elementBehavior}' was innitialized"
-					#log elementEffects
-				else
-					log "the behavior '#{elementBehavior}' could not be initialized" 
-			$(this).data 'elementEffects', elementEffects
+		checkMediaQuery = (mq)->
+			#check if the media query currently applies, return true or false
+			return true
 
 		processEachEffect = (callback)->
 			# provide a callback, will be passed the effect in the context of the element as this
@@ -73,7 +71,53 @@ $(document).ready ()->
 						callback.call(effect)
 						# log effect
 			return false
-			
+
+		# later used to determine if a fixed clone container will need to be created or not
+		anyClones = false
+
+		# bind actual behaviors to the elements
+		#  and bind element-specific data
+		newCollection.each ()->
+			elementEffects = []
+			that = $(this)
+			for elementBehavior in $(this).attr('data-scrolljunkie').split(',')
+				if sjBehaviors[elementBehavior]?
+					elementEffects = for e in sjBehaviors[elementBehavior].effects
+						f = $.extend({}, e)
+						f.behaviorName = elementBehavior
+						f.mediaQuery = sjBehaviors[elementBehavior].mediaQuery
+						f.host = that
+						f.elements = {} # used to store custom elements that will be acted upon
+						f.data = {} # used to store custom data that will be used to perform actions
+						f.sj = sj
+						# keep an eye for effects that will use clone
+						anyClones = true if that.clone
+
+						f
+					log "the behavior '#{elementBehavior}' was innitialized"
+					#log elementEffects
+				else
+					log "the behavior '#{elementBehavior}' could not be initialized" 
+			$(this).data 'elementEffects', elementEffects
+
+		# if clones are in play, create a cloneDiv and make some copies
+		if anyClones
+			sj.cloneDiv = $('<div style="position:fixed;top:0;width:100%;background:green;height:0"></div>')
+			body.append(sj.cloneDiv)
+			# TODO
+			#  if the element is a transition, it will need to be placed in wrapper
+
+			processEachEffect ()->
+				if this.clone
+					this.clone = this.host.clone()
+					sj.cloneDiv.append(this.clone)
+					# TODO
+					#  if the element will use transforms, then put cloned element in a
+					#   set child container to show or hide overflow as directed
+
+
+
+
 		computeOffset = (eh, vh, offset, endOffset, value)->
 			# eh : elements height
 			# vh : the viewports height
@@ -103,12 +147,15 @@ $(document).ready ()->
 				value = "#{offset} + #{value}"
 			return eval(value)
 
-		checkMediaQuery = (mq)->
-			#check if the media query currently applies, return true or false
-			return true
+		positionClone = (effect)->
+			# TODO
+			#  keep clone over host element, used for both simple clones and transforms
+
 
 		performTransform = (effect)->
 			# TODO
+			#  do lots of math, scoot things around
+
 
 		# now initilize each objects effect
 		processEachEffect ()->
@@ -120,22 +167,34 @@ $(document).ready ()->
 				#{sj.windowHeight}px window height<br>
 				#{sj.documentHeight}px doc height")
 
-		$(window).on 'resize', (e)->
+		$(window).on 'resize', (event)->
 			sj.documentHeight = $(document).height()
 			sj.windowHeight = $(window).height()
 			sj.maxOffset = sj.documentHeight - sj.windowHeight
 			processEachEffect ()->
-				this.width = this.host.outerWidth()
-				this.height = this.host.outerHeight()
-				this.topOffset = this.host.offset().top
-				this.startOffset = computeOffset(this.height, sj.windowHeight, this.topOffset, sj.maxOffset, this.start)
-				this.endOffset = computeOffset(this.height, sj.windowHeight, this.topOffset, sj.maxOffset, this.end)
-				this.resize()
+				this.resize = {}
+				this.resize.width = this.host.outerWidth()
+				this.resize.height = this.host.outerHeight()
+				this.resize.topOffset = this.host.offset().top
+				this.resize.startOffset = computeOffset(
+					this.resize.height, 
+					sj.windowHeight, 
+					this.resize.topOffset, 
+					sj.maxOffset, 
+					this.start)
+				this.resize.endOffset = computeOffset(
+					this.resize.height, 
+					sj.windowHeight, 
+					this.resize.topOffset, 
+					sj.maxOffset, 
+					this.end)
+				this.resize.rangeOffset = this.resize.endOffset - this.resize.startOffset
+				this.onResize.call(this)
 
 			if debugOutput
 				updateDebug()
 
-		$(window).on 'scroll', (e)->
+		$(window).on 'scroll', (event)->
 			# TODO
 			#  set the global offset position, compensate for bounce DONE
 			#  go through all effects and act on the ones within range DONE
@@ -146,12 +205,19 @@ $(document).ready ()->
 			sj.topOffset = sj.maxOffset if sj.topOffset > sj.maxOffset
 
 			processEachEffect ()->
-				if this.startOffset < sj.topOffset < this.endOffset
-					# TODO
-					#  apply easing math to perform and transform callbacks
-					this.perform()
-					if this.transform.ratioY != "0"
-						doTransforms(this)
+				this.scroll = {}
+				this.scroll.pixelsFromStart = sj.topOffset - this.resize.startOffset
+				this.scroll.percentFromStart = this.scroll.pixelsFromStart / this.resize.rangeOffset
+				this.scroll.percentFromStartEased = easingFunc[this.easing](this.scroll.percentFromStart)
+				this.scroll.pixelsFromStartEased = easingFunc[this.easing](this.scroll.percentFromStart) * this.scroll.pixelsFromStart
+				this.onScroll.call(this)
+
+				if this.clone
+					positionClone(this)
+
+
+				if this.transform.ratioY != "0"
+					doTransforms(this)
 
 			if debugOutput
 				updateDebug()

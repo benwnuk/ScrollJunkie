@@ -7,9 +7,6 @@
 		<script>
 			$(document).ready(function(){
 
-				
-
-
 				$('body').scrollJunkie({
 
 				// all start and ends based on position of element relative to top of screen
@@ -19,6 +16,7 @@
 				// positive numbers delay start/end (lower on page), negative numbers start/end sooner (higher on page)
 
 					debug: true,
+					dataAttribute: 'data-scrolljunkie', // the global attribute used to attach behaviors, defaults to data-scrolljunkie
 					behaviors: {
 						'behaviorName' : {
 							mediaQuery : '', // a media query used to filter if this effect is used or not
@@ -27,21 +25,22 @@
 									name: '',
 									start : '-100vh + 100px', // start as soon as it enters bottom of screen - default '-100vh'
 									end : '100% - 100px', // will end when the bottom of the element clears top of screen - default '100%'
-									easing : 'easingFunctionName', // easing function to use - default is 'linear'
+									easing : 'linear', // easing function to use - default is 'linear'
+									clone : false, // for transform performance. Defaults to true for transform elements, false for all others
 									init: function(){
 										// optional, ran at startup, can store data in this.data
 										this.elements.innerH3 = this.find('h3')
 									},
-									resize: function(){
+									onResize: function(){
 										// optional, ran upon screen resize
 									},
-									perform: function(p){ // position will be 0 if before start, 1 if after end, or decimal if in between
+									onScroll: function(p){ // position will be 0 if before start, 1 if after end, or decimal if in between
 										// "this" is the element, or dubplicated transformed element
 										// jquery effects to 
 										if (p <= 0 || p > 1) {
-											this.elements.innerH3.css({'opacity' : '0'})
+											//this.elements.innerH3.css({'opacity' : '0'})
 										} else {
-											this.elements.innerH3.css({'opacity' : '1'})
+											//this.elements.innerH3.css({'opacity' : '1'})
 										}
 									},
 									transform: {
@@ -54,28 +53,29 @@
 								}
 							]
 						},
-						'slowScroll': {
-							effects: [
-								{
-									init : function(){
-										console.log('initilized')
-									},
-									transform: {
-										ratioY: '-20%'
-									}
-								}
-							]
-						},
-						'fadeInWindow': {
+						// 'slowScroll': {
+						// 	effects: [
+						// 		{
+						// 			init : function(){
+						// 				//console.log('initilized')
+						// 			},
+						// 			transform: {
+						// 				ratioY: '-20%'
+						// 			}
+						// 		}
+						// 	]
+						// },
+						'hideAndShow': {
 							effects: [
 								{
 									start : '-100vh + 100px', // start as soon as it enters bottom of screen - default '-100vh'
 									end : '100% - 100px', // will end when the bottom of the element clears top of screen - default
-									perform: function(p){
-										if (p <= 0 || p > 1) {
-											this.host.css({'opacity' : '0'})
+									clone : true,
+									onScroll: function(){
+										if (this.scroll.percentFromStart > 0 & this.scroll.percentFromStart < 1) {
+											this.host.add(this.clone).css({'opacity' : '1'})
 										} else {
-											this.host.css({'opacity' : '1'})
+											this.host.add(this.clone).css({'opacity' : '0'})
 										}
 									}
 								}
@@ -103,7 +103,7 @@
 		<section>
 			<div>
 				<h1>testing sections</h1>
-				<div data-scrolljunkie="effect1,effect2">Hello World</div>
+				<div data-scrolljunkie="hideAndShow">Hello World</div>
 			</div>
 		</section>
 		<section class="bg-t50 bg-h100 bg-b50" data-scrolljunkie="slowScroll"  style="background-image:url(img/grid-yellow.png)">
