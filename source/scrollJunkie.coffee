@@ -17,6 +17,14 @@ $(document).ready ()->
 			easeOutQuint: (t)-> 1+(--t)*t*t*t*t
 			easeInOutQuint: (t)-> t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t
 
+		if !window.requestAnimationFrame
+			window.requestAnimationFrame = ()->
+				window.webkitRequestAnimationFrame ||
+				window.mozRequestAnimationFrame ||
+				window.oRequestAnimationFrame ||
+				window.msRequestAnimationFrame ||
+				(callback,element)-> window.setTimeout(callback, 1000 / 60 )
+
 		body = $('body')
 		activeSelector = opts.dataAttribute || 'data-scrolljunkie'
 		debugOutput = opts.debug || false
@@ -195,7 +203,7 @@ $(document).ready ()->
 			if debugOutput
 				updateDebug()
 
-		$(window).on 'scroll', (event)->
+		scroll = (event)->
 			# TODO
 			#  set the global offset position, compensate for bounce DONE
 			#  go through all effects and act on the ones within range DONE
@@ -223,6 +231,11 @@ $(document).ready ()->
 
 			if debugOutput
 				updateDebug()
+
+
+		$(window).on 'scroll', (event)->
+			window.requestAnimationFrame scroll
+			# scroll()
 
 		initTransforms = (effect)->
 			# TODO

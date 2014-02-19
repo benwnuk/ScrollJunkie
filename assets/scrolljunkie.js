@@ -1,7 +1,7 @@
 (function() {
   $(document).ready(function() {
     return $.fn.scrollJunkie = function(opts) {
-      var activeSelector, anyClones, body, checkMediaQuery, computeOffset, debugDisplay, debugOutput, doTransforms, easingFunc, i, initTransforms, io, log, newCollection, performTransform, positionClone, processEachEffect, sj, sjBehaviors, sjCollection, updateDebug, v, vo, _ref;
+      var activeSelector, anyClones, body, checkMediaQuery, computeOffset, debugDisplay, debugOutput, doTransforms, easingFunc, i, initTransforms, io, log, newCollection, performTransform, positionClone, processEachEffect, scroll, sj, sjBehaviors, sjCollection, updateDebug, v, vo, _ref;
       easingFunc = {
         linear: function(t) {
           return t;
@@ -55,6 +55,13 @@
           };
         }
       };
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function() {
+          return window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
+            return window.setTimeout(callback, 1000 / 60);
+          };
+        };
+      }
       body = $('body');
       activeSelector = opts.dataAttribute || 'data-scrolljunkie';
       debugOutput = opts.debug || false;
@@ -219,7 +226,7 @@
           return updateDebug();
         }
       });
-      $(window).on('scroll', function(event) {
+      scroll = function(event) {
         sj.topOffset = $(window).scrollTop();
         if (sj.topOffset < 1) {
           sj.topOffset = 0;
@@ -245,6 +252,9 @@
         if (debugOutput) {
           return updateDebug();
         }
+      };
+      $(window).on('scroll', function(event) {
+        return window.requestAnimationFrame(scroll);
       });
       initTransforms = function(effect) {};
       doTransforms = function(effect) {};

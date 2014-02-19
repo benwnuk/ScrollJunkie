@@ -91,6 +91,34 @@
 									}
 								}
 							]
+						},
+						'bigAndSmall': {
+							effects: [
+								{
+									start : '-100vh + 20px',
+									end : '-50vh - 50%',
+									easing : 'easeOutQuad',
+									init : function(){
+										this.host.add(this.clone).css({'transform' : 'scale(0,0)' })
+									},
+									onScroll: function(){
+										if (this.scroll.inRange) {
+											this.host.add(this.clone).css({'transform' : 'scale('+this.scroll.percentFromStart+','+this.scroll.percentFromStart+')' })
+										}
+										console.log(this.scroll.percentFromStart)
+									}
+								},
+								{
+									start : '-50vh - 50%', // start as soon as it enters bottom of screen - default '-100vh'
+									end : '100% - 20px', // will end when the bottom of the element clears top of screen - default
+									easing : 'easeOutQuad',
+									onScroll: function(){
+										if (this.scroll.inRange) {
+											this.host.add(this.clone).css({'transform' : 'scale('+1-this.scroll.percentFromStart+','+1-this.scroll.percentFromStart+')'})
+										}
+									}
+								}
+							]
 						}
 					}
 				})
@@ -119,7 +147,7 @@
 		</section>
 		<section class="bg-t50 bg-h100 bg-b50" data-scrolljunkie="slowScroll"  style="background-image:url(img/grid-yellow.png)">
 			<div>
-				<h1 data-scrolljunkie="hideAndShow">this should be 150%</h1>
+				<h1 data-scrolljunkie="bigAndSmall">this should be 150%</h1>
 			</div>
 		</section>
 		<section>
