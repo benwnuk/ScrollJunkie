@@ -97,7 +97,7 @@
 								{
 									start : '-100vh + 20px',
 									end : '-50vh - 50%',
-									easing : 'easeOutQuad',
+									easing : 'easeInQuart',
 									init : function(){
 										this.host.add(this.clone).css({'transform' : 'scale(0,0)' })
 									},
@@ -108,16 +108,16 @@
 										console.log(this.scroll.percentFromStart)
 									}
 								},
-								{
-									start : '-50vh - 50%', // start as soon as it enters bottom of screen - default '-100vh'
-									end : '100% - 20px', // will end when the bottom of the element clears top of screen - default
-									easing : 'easeOutQuad',
-									onScroll: function(){
-										if (this.scroll.inRange) {
-											this.host.add(this.clone).css({'transform' : 'scale('+1-this.scroll.percentFromStart+','+1-this.scroll.percentFromStart+')'})
-										}
-									}
-								}
+								// {
+								// 	start : '-50vh - 50%', // start as soon as it enters bottom of screen - default '-100vh'
+								// 	end : '100% - 20px', // will end when the bottom of the element clears top of screen - default
+								// 	easing : 'easeInQuart',
+								// 	onScroll: function(){
+								// 		if (this.scroll.inRange) {
+								// 			this.host.add(this.clone).css({'transform' : 'scale('+1-this.scroll.percentFromStart+','+1-this.scroll.percentFromStart+')'})
+								// 		}
+								// 	}
+								// }
 							]
 						}
 					}
